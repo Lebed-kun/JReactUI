@@ -1,2 +1,0 @@
-# JReactUI
-Created with CodeSandbox
