@@ -39,3 +39,8 @@ ReactDOM.render(
   />,
   document.getElementById("customized-editable-content")
 );
+
+ReactDOM.render(
+  <EditableContent data="No edits allowed" editable={false} />,
+  document.getElementById("disabled-editable-content")
+);
