@@ -6,38 +6,57 @@ import Input from "./Input.jsx";
 
 const renderElement = ({
   currData,
+  setCurrData,
   element,
   blockTag,
   blockProps,
   inputTag,
   inputProps
 }) =>
-  element === Block ? (
+  element === "Block" ? (
     <Block tag={blockTag} {...blockProps}>
       {currData}
     </Block>
   ) : (
-    <Input tag={inputTag} value={currData} {...inputProps} />
+    <Input
+      tag={inputTag}
+      value={currData}
+      onChange={e => setCurrData(e.currentTarget.value)}
+      {...inputProps}
+    />
   );
 
 const renderButton = ({
-  editContent = "Edit",
-  saveContent = "Save",
-  onChange,
-  setCurrData,
+  editContent,
+  saveContent,
+  currData,
+  element,
   setElement,
-  buttonTag,
-  buttonProps
+  onChange,
+  tag,
+  props
 }) =>
-  React.createElement(buttonTag, {
-    onClick: () => {}
-  });
+  React.createElement(
+    tag,
+    {
+      onClick: () => {
+        if (element === "Block") {
+          setElement("Input");
+        } else {
+          setElement("Block");
+          if (typeof onChange === "function") onChange(currData);
+        }
+      },
+      ...props
+    },
+    element === "Block" ? [editContent] : [saveContent]
+  );
 
 const EditableField = ({
   data,
   editable = true,
   onChange,
-  blockTag = "div",
+  blockTag = "span",
   blockProps = {},
   buttonTag = "button",
   buttonProps = {},
@@ -47,17 +66,30 @@ const EditableField = ({
   ...props
 }) => {
   const [currData, setCurrData] = useState(data);
-  const [element, setElement] = useState(Block);
+  const [element, setElement] = useState("Block");
 
   return React.createElement(tag, props, [
     renderElement({
       currData,
+      setCurrData,
       element,
       blockTag,
       blockProps,
       inputTag,
       inputProps
-    })
+    }),
+    editable
+      ? renderButton({
+          editContent: buttonProps.editContent || "Edit",
+          saveContent: buttonProps.saveContent || "Save",
+          currData,
+          element,
+          setElement,
+          onChange,
+          tag: buttonTag,
+          props: buttonProps
+        })
+      : null
   ]);
 };
 
