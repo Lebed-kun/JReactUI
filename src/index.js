@@ -23,3 +23,19 @@ ReactDOM.render(
   />,
   document.getElementById("effect-editable-content")
 );
+
+ReactDOM.render(
+  <EditableContent
+    data="Customized component"
+    blockTag="h3"
+    inputTag="textarea"
+    inputProps={{
+      style: {
+        boxSizing: "border-box",
+        width: "100%"
+      }
+    }}
+    style={{ border: "1px solid pink" }}
+  />,
+  document.getElementById("customized-editable-content")
+);
